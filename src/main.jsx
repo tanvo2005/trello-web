@@ -8,9 +8,9 @@ import theme from './theme'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <CssVarsProvider theme={theme}> // nhận vào 1 prop theme từ file theme.js
+    <CssVarsProvider theme={theme}> {/** nhận vào 1 prop theme từ file theme.js */}
       <CssBaseline />
-      <App />
+      <App /> 
     </CssVarsProvider>
   </React.StrictMode>,
 )

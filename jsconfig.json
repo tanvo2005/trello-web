@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "paths": {    // khai báo đưỚng dẫn
+      "~/*": ["./src/*"], // "~/*": khai báo để check các các ~/ đến bất kì chổ nào 
+    }, // ["./src/*"] thì đi vào thư mục src để tìm kiếm
+  }
+}

@@ -18,9 +18,9 @@ import Typography from '@mui/material/Typography'
 import { useColorScheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Container from '@mui/material/Container'
-import ModeSelect from '../../components/ModeSelect'
-import AppBar from '../../components/AppBar'
-import BoardBar from '../../pages/Boards/BoardBar'
+import ModeSelect from '~/components/ModeSelect'
+import AppBar from '~/components/AppBar'
+import BoardBar from '~/pages/Boards/BoardBar'
 import BoardContent from './BoardContent'
 
 
@@ -29,11 +29,9 @@ function Board() {
     // disableGutters maxWidth={false} sẽ hiển thi full màn hình không bị trình trạng pading, margin hay chiều
     // rông tối đa nữa
     <Container disableGutters maxWidth={false} sx={{ height: '100vh', backgroundColor: 'primary.main'}}>
-      
+    
       <AppBar />
-
       <BoardBar />
-
       <BoardContent />
     </Container>
   )

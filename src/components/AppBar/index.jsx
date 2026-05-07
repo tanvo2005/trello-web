@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ModeSelect from '../../components/ModeSelect'
+import ModeSelect from '~/components/ModeSelect'
 import Box from '@mui/material/Box'
 
 export class AppBar extends Component {

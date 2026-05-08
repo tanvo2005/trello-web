@@ -28,7 +28,7 @@ function Board() {
    return (
     // disableGutters maxWidth={false} sẽ hiển thi full màn hình không bị trình trạng pading, margin hay chiều
     // rông tối đa nữa
-    <Container disableGutters maxWidth={false} sx={{ height: '100vh', backgroundColor: 'primary.main'}}>
+    <Container disableGutters maxWidth={false} sx={{ height: '100vh'}}>
     
       <AppBar />
       <BoardBar />

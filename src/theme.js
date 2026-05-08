@@ -5,8 +5,8 @@ import { cyan, orange, red, teal, deepOrange } from '@mui/material/colors'
 const theme = extendTheme({
   // khai báo những thuộc tính tự đặt cho riêng app cảu mình, trelloCustom là tên tự đặt 
   trello: {
-    appBarHeight: '48px',
-    boardBarHeight: '48px',
+    appBarHeight: '58px',
+    boardBarHeight: '60px',
 
   },
   colorSchemes: {

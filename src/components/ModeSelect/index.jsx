@@ -28,14 +28,37 @@ function ModeSelect() {
   };
 
   return (
-    <FormControl  size="small" sx={{ minWidth: 120}}> {/* // sx={{ m: 1, minWidth: 120 }} */}
-      <InputLabel id="label-select-dark-light-mode">Mode</InputLabel>
+    <FormControl  
+      size="small" 
+      sx={{ 
+        minWidth: 120,
+        color: 'white',
+        }}
+    > {/* // sx={{ m: 1, minWidth: 120 }} */}
+      <InputLabel 
+        id="label-select-dark-light-mode"
+        sx={{
+          color: 'white',
+          '&.Mui-focused': {
+            color: 'white', // khi focus vào label thì vẫn giữ màu trắng, không bị đổi màu theo mặc định của Material UI
+          }
+        }}
+      >
+        Mode
+      </InputLabel>
       <Select
         labelId="label-select-dark-light-mode"
         id="select-dark-light-mode"
         value={mode}
         label="mode"
         onChange={handleChange}
+        sx={{
+          color: 'white',
+          '.MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
+          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
+          '.MuiSvgIcon-root': { color: 'white' }, // css cho icon mũi tên của Select có màu trắng
+        }}
       >
         <MenuItem value='light'>
           {/* <div style={{ display: 'flex', alignItems: 'center', gap: '8px'}}>

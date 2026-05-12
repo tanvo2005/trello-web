@@ -13,13 +13,13 @@ import Tooltip from '@mui/material/Tooltip'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
 const MENU_STYLE = {
-  color: 'primary.main',
-  backgroundColor: 'white',
+  color: 'white',
+  backgroundColor: 'transparent',
   border: 'none',
   paddingX: '5px',
   borderRadius: '4px',
   '& .MuiSvgIcon-root': {
-    color: 'primary.main'
+    color: 'white'
   },
   '&:hover': {
     backgroundColor: 'primary.50'
@@ -37,7 +37,9 @@ export class BoardBar extends Component {
         justifyContent: 'space-between',
         gap: 2,
         overflow: 'auto',
-        borderTop: '1px solid #00bfa5'
+        borderBottom: '1px solid #00bfa5',
+        backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
+
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Chip 
@@ -48,13 +50,13 @@ export class BoardBar extends Component {
           />
 
           <Chip 
-            sx={{ color: 'primary.main',
-              backgroundColor: 'white',
+            sx={{ color: 'white',
+              backgroundColor: 'transparent',
               border: 'none',
               paddingX: '5px',
               borderRadius: '4px',
               '& .MuiSvgIcon-root': {
-                color: 'primary.main'
+                color: 'white'
               },
               '&:hover': {
                 backgroundColor: 'primary.50'
@@ -90,14 +92,25 @@ export class BoardBar extends Component {
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
 
-          <Button variant='outlined' startIcon={<PersonAddIcon />}>
-              Invite
+          <Button 
+            variant='outlined' 
+            startIcon={<PersonAddIcon />}
+            sx={{
+              color: 'white',
+              borderColor: 'white',
+              '&:hover' : { borderColor: 'white'}
+            }}
+          >
+            Invite
           </Button>
 
           <AvatarGroup
             max={4}
             total={24}
-            sx={{ '& .MuiAvatar-root': { width: 32, height: 32, fontSize: '0.875rem' } }}
+            sx={{ 
+              '& .MuiAvatar-root': { width: 34, height: 34, fontSize: '0.875rem', border: 'none' },
+              gap: '10px', // tách các avatar ra xa nhau hơn
+            }}
           >
             <Tooltip title=" TanvoPY">
               <Avatar

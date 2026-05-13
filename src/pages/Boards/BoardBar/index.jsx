@@ -37,7 +37,9 @@ export class BoardBar extends Component {
         justifyContent: 'space-between',
         gap: 2,
         overflow: 'auto',
-        borderBottom: '1px solid #00bfa5',
+        '&::-webkit-scrollbar-track': { m: 2},
+        borderBottom: '1px solid ',
+        borderBottomColor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
         backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
 
       }}>
@@ -108,8 +110,9 @@ export class BoardBar extends Component {
             max={4}
             total={24}
             sx={{ 
-              '& .MuiAvatar-root': { width: 34, height: 34, fontSize: '0.875rem', border: 'none' },
+              '& .MuiAvatar-root': { width: 34, height: 34, fontSize: '0.875rem', border: 'none', color: 'white', cursor: 'pointer' },
               gap: '10px', // tách các avatar ra xa nhau hơn
+              '& .MuiAvatar-colorDefault': { backgroundColor: '#a4b0be'}
             }}
           >
             <Tooltip title=" TanvoPY">

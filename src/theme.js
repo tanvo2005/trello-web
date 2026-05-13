@@ -2,13 +2,16 @@ import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 // import { cyan, orange, red, teal, deepOrange } from '@mui/material/colors'
 import { BorderColor } from '@mui/icons-material';
 
+const APP_BAR_HEIGHT = '58px'
+const BOARD_BAR_HEIGHT = '60px'
+const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`
 // Create a theme instance.
 const theme = extendTheme({
   // khai báo những thuộc tính tự đặt cho riêng app cảu mình, trelloCustom là tên tự đặt 
   trello: {
-    appBarHeight: '58px',
-    boardBarHeight: '60px',
-
+    appBarHeight: APP_BAR_HEIGHT,
+    boardBarHeight: BOARD_BAR_HEIGHT,
+    boardContentHeight: BOARD_CONTENT_HEIGHT,
   },
   colorSchemes: {
     // light: {
@@ -46,8 +49,8 @@ const theme = extendTheme({
           },
           '*::-webkit-scrollbar-thumb:hover': {
             backgroundColor: 'white',
-            
           },
+          
         }
       }
     },
@@ -64,6 +67,15 @@ const theme = extendTheme({
         root: ({ theme }) => ({
           // color: theme.palette.primary.main,
           fontSize: '0.875rem',
+        })
+      },
+    },
+    MuiTypography: { // quy định style cỡ chữ cho tất cả các Typography
+      styleOverrides: {
+        root: ({ theme }) => ({
+          '&.MuiTypography-body1': { // chỉ áp dụng cho Typography có variant là body1
+          fontSize: '0.875rem',
+          }
         })
       },
     },

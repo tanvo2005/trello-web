@@ -5,13 +5,17 @@ import { BorderColor } from '@mui/icons-material';
 const APP_BAR_HEIGHT = '58px'
 const BOARD_BAR_HEIGHT = '60px'
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`
+const COLUMN_HEADER_HEIGHT = '50px'
+const COLUMN_FOOTER_HEIGHT = '56px'
 // Create a theme instance.
 const theme = extendTheme({
   // khai báo những thuộc tính tự đặt cho riêng app cảu mình, trelloCustom là tên tự đặt 
   trello: {
     appBarHeight: APP_BAR_HEIGHT,
     boardBarHeight: BOARD_BAR_HEIGHT,
-    boardContentHeight: BOARD_CONTENT_HEIGHT,
+    boardContentHeight: BOARD_CONTENT_HEIGHT, 
+    columnHeaderHeight: COLUMN_HEADER_HEIGHT, // khai báo để sử dụng chung cho cả ListCards và Column, tránh việc phải khai báo 2 lần, nếu muốn chỉnh sửa chỉ cần chỉnh sửa ở đây là được
+    columnFooterHeight: COLUMN_FOOTER_HEIGHT,
   },
   colorSchemes: {
     // light: {

@@ -18,10 +18,10 @@ import Typography from '@mui/material/Typography'
 import { useColorScheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Container from '@mui/material/Container'
-import ModeSelect from '~/components/ModeSelect'
-import AppBar from '~/components/AppBar'
-import BoardBar from '~/pages/Boards/BoardBar'
-import BoardContent from './BoardContent'
+import ModeSelect from '~/components/ModeSelect/ModeSelect'
+import AppBar from '~/components/AppBar/AppBar'
+import BoardBar from '~/pages/Boards/BoardBar/BoardBar'
+import BoardContent from './BoardContent/BoardContent'
 
 
 function Board() {

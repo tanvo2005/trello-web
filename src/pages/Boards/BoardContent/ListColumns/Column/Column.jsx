@@ -17,9 +17,10 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
+import { mapOrder } from '~/utils/sorts'
 
 
-function Column() {
+function Column({ column }) {
   // const COLUMN_HEADER_HEIGHT = '50px'
   // const COLUMN_FOOTER_HEIGHT = '56px'
 
@@ -32,6 +33,9 @@ function Column() {
   const handleClose = (event) => {
     setAnchorEl(null);
   }
+
+  // sắp xếp card theo thứ tự của mảng cardOrderIds
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
     <>
       <Box sx={{
@@ -59,7 +63,7 @@ function Column() {
               fontSize: '1rem'
             }}
           >
-            Column Title
+            {column?.title}
           </Typography>
           <Box>
             <Tooltip title='More Options'>
@@ -119,7 +123,10 @@ function Column() {
           </Box>
         </Box>
 
-        <ListCards />
+
+        {/* <ListCards cards={column?.cards} /> */}
+        {/* truyền props vào để sắp xếp theo thứ tự của cardOrderIds */}
+        <ListCards cards={orderedCards} />
 
         {/* footer column */}
         <Box sx={{

@@ -2,7 +2,7 @@ import React from 'react'
 import Box from '@mui/material/Box'
 import Card from './Card/Card'
 
-function ListCards() {
+function ListCards({ cards }) {
   // const COLUMN_HEADER_HEIGHT = '50px'  đưa qua theme dể dùng chung cho toàn bộ 2 file
   // const COLUMN_FOOTER_HEIGHT = '56px'
   return (
@@ -26,19 +26,14 @@ function ListCards() {
       '&::-webkit-scrollbar-thumb:hover': { backgroundColor: '#bfc2cf', },
     }}>
       {/* content column */}
-      <Card />
-      <Card temporaryHeightMedia />
-      <Card temporaryHeightMedia />
-      {/* <Card temporaryHeightMedia /> truyền vào 1 props temporaryHeightMedia để ẩn ảnh đi */}
-      <Card temporaryHeightMedia />
-      <Card temporaryHeightMedia />
-      <Card temporaryHeightMedia />
-      <Card temporaryHeightMedia />
-      <Card temporaryHeightMedia />
-      <Card temporaryHeightMedia />
-      <Card temporaryHeightMedia />
-      <Card temporaryHeightMedia />
-      
+      {cards?.map(card => <Card key={card._id} card={card} />)}
+
+
+      {/*
+       <Card temporaryHeightMedia />
+       <Card temporaryHeightMedia />
+       <Card temporaryHeightMedia /> truyền vào 1 props temporaryHeightMedia để ẩn ảnh đi */}
+
 
       {/* <Card sx={{
         cursor: 'pointer',
@@ -50,8 +45,8 @@ function ListCards() {
         </CardContent>
 
       </Card> */}
-      
-      
+
+
     </Box>
   )
 }

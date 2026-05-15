@@ -4,8 +4,8 @@ import Column from './Column/Column'
 import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
 
-function ListColumn() {
-  
+function ListColumn({ columns }) {
+
   return (
     <Box
       sx={{
@@ -18,8 +18,10 @@ function ListColumn() {
         '&::-webkit-scrollbar-track': { m: 2 }   // '&::-webkit-scrollbar-track css cho phần bộ ở ngoài của thanh cuộn
       }}
     > {/* box này có tác dụng để làm thanh scroll cho nó đẹp khi có nhiều column */}
-      <Column />
-      <Column />
+
+      {columns?.map((column, index) => {
+        return <Column key={index} column={column} />
+      })}
 
       <Box sx={{
         minWidth: '200px',
@@ -30,20 +32,20 @@ function ListColumn() {
         backgroundColor: '#ffffff3d'
       }}>
         <Button
-          startIcon={ <AddIcon />}
+          startIcon={<AddIcon />}
           sx={{
             color: 'white',
             width: '100%',
             justifyContent: 'flex-start',
             pl: 2.5,
             py: 1,
-            
+
           }}
         >
           Add new column
         </Button>
       </Box>
-    
+
     </Box>
   )
 }

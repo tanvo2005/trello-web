@@ -19,6 +19,9 @@ import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
 import { mapOrder } from '~/utils/sorts'
 
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 
 function Column({ column }) {
   // const COLUMN_HEADER_HEIGHT = '50px'
@@ -36,17 +39,41 @@ function Column({ column }) {
 
   // sắp xếp card theo thứ tự của mảng cardOrderIds
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+
+  // sửu lí logic kéo thả của column
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: column._id, data: { ...column } })
+  // useSortable cần có id để xác định phần tử nào đang đước kéo thả
+  // data: {...column}: bổ sung thêm data dữ liệu sau khi kéo thả
+
+  const dndkitColumnStyles = {
+    // touchAction: 'none', // Dành cho sensor default dạng PointerSensor 
+    // Nếu sử dụng CSS.Transform như docs sẽ lỗi kiểu stretch( Kéo dài)
+    // https://github.com/clauderec/dnd-kit/issues/117
+    // transform: CSS.Transform.toString(transform), sữa lỗi không có animation khi kéo thả column bằng cách chuyển đổi giá trị transform từ  sang Translate
+    transform: CSS.Translate.toString(transform),
+
+    transition,
+  }
+
+
   return (
     <>
-      <Box sx={{
-        minWidth: '300px',
-        maxWidth: '300px',
-        backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'),
-        marginLeft: '16px',
-        borderRadius: '6px',
-        height: 'fit-content', // chiều cao sẽ tự động điều chỉnh theo nội dung bên trong, nếu nội dung nhiều thì chiều cao sẽ tăng lên, nếu nội dung ít thì chiều cao sẽ giảm xuống
-        maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`, // chiều cao tối đa sẽ bằng chiều cao của board content trừ đi khoảng cách giữa các column, nếu nội dung nhiều hơn chiều cao tối đa thì sẽ xuất hiện thanh cuộn
-      }}>
+      <Box
+        ref={setNodeRef}
+        style={dndkitColumnStyles}
+        {...attributes}
+        {...listeners}
+        sx={{
+          minWidth: '300px',
+          maxWidth: '300px',
+          backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'),
+          marginLeft: '16px',
+          borderRadius: '6px',
+          height: 'fit-content', // chiều cao sẽ tự động điều chỉnh theo nội dung bên trong, nếu nội dung nhiều thì chiều cao sẽ tăng lên, nếu nội dung ít thì chiều cao sẽ giảm xuống
+          maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`, // chiều cao tối đa sẽ bằng chiều cao của board content trừ đi khoảng cách giữa các column, nếu nội dung nhiều hơn chiều cao tối đa thì sẽ xuất hiện thanh cuộn
+        }}
+      >
         {/* header column */}
         <Box sx={{
           height: (theme) => theme.trello.columnHeaderHeight,

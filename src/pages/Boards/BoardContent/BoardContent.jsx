@@ -3,8 +3,10 @@ import Box from '@mui/material/Box'
 import ListColumn from './ListColumns/ListColumn'
 import { mapOrder } from '~/utils/sorts'
 
-import { DndContext, PointerSensor, useSensor, useSensors, TouchSensor, MouseSensor } from '@dnd-kit/core'
+import { DndContext, PointerSensor, useSensor, useSensors, TouchSensor, MouseSensor, DragOverlay, defaultDropAnimationSideEffects } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
+import Column from './ListColumns/Column/Column'
+import Card from './ListColumns/Column/ListCards/Card/Card'
 
 function BoardContent({ board }) {
   // const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
@@ -27,6 +29,28 @@ function BoardContent({ board }) {
 
 
   //  các hàm xử lý sự kiện kéo thả
+  const ACTIVE_DRAG_ITEM_TYPE = {
+    COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
+    CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
+  }
+
+  // tại 1 thời điẻm chỉ có 1 phần tử đang được kéo là column hoặc card nên có dùng 1 state để lưu id
+  const [activeDragItemId, setActiveDragItemId] = useState(null)
+  const [activeDragItemType, setActiveDragItemType] = useState(null)
+  const [activeDragItemData, setActiveDragItemData] = useState(null)
+
+
+
+  // onDragStart khi bắt đầu kéo
+  const handleDragStart = (event) => {
+    // console.log('handelDragStart', event)
+    // xử lí làm overlay khi kéo thả set các giá trị của phần tử đang được kéo vào state để sử dụng cho việc hiển thị overlay và các thông tin liên quan đến phần tử đang được kéo
+    setActiveDragItemId(event?.active?.id) // id của phần tủ đang kéo
+    setActiveDragItemType(event?.active?.data?.current?.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN) // type của phần tử đang kéo nếu nó có columnId là card, ngược lại là column
+    setActiveDragItemData(event?.active?.data?.current) // dữ liệu của phần tử đang kéo
+
+  }
+
   // onDragEnd khi kết thúc kéo thả
   const handleDragEnd = (event) => {
     /* 
@@ -59,11 +83,36 @@ function BoardContent({ board }) {
 
     }
 
+    // sau khi thả thì set các giá trị về null
+    setActiveDragItemId(null)
+    setActiveDragItemType(null)
+    setActiveDragItemData(null)
+
   }
 
+  /**
+   * animation khi thả drop (phầN tủ) test bằng cách kéo xong thả trực tiếp và nhìn vào phàn giữ chổ overplay
+   * 
+   */
+  const customDropAnimation = {
+    sideEffects: defaultDropAnimationSideEffects({
+      styles: {
+        active: {
+          opacity: '0.5',
+        }
+      }
+    })
+  }
+
+
   return (
-    <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-      {/* DndContext là vùng kéo thả   */}
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      {/* DndContext là vùng kéo thả 
+      onDragStart khi bắt đầu kéo  */}
       <Box sx={{
         backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
         width: '100%',
@@ -72,6 +121,14 @@ function BoardContent({ board }) {
       }}>
         {/* <ListColumn columns={board?.columns} /> */}
         <ListColumn columns={orderedColumns} />
+        <DragOverlay dropAnimation={customDropAnimation}>
+          {/* DragOverlay là phần tử hiển thị khi kéo thả, nó sẽ hiển thị phần tử đang được kéo theo con trỏ chuột 
+          nếu  như không tồn tại ID và không tồn tại type và nó là null trường hợp không kéo thả gì hết
+          */}
+          {(!activeDragItemId || !activeDragItemType) && null}
+          {(activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} />}
+          {(activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) && <Card card={activeDragItemData} />}
+        </DragOverlay>
 
         {/* columns */}
       </Box>

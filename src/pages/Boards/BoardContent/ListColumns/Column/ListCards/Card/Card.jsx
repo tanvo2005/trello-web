@@ -9,6 +9,9 @@ import AttachmentIcon from '@mui/icons-material/Attachment'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 
 function Card({ card }) {
   // if (temporaryHeightMedia) {
@@ -29,14 +32,35 @@ function Card({ card }) {
   const shouldShowCardActions = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length // kiểm tra 1 trong 3 thằng tồn tại thì là true
   }
+
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: card._id, data: { ...card } })
+  // useSortable cần có id để xác định phần tử nào đang đước kéo thả
+  // data: {...card}: bổ sung thêm data dữ liệu sau khi kéo thả
+
+  const dndkitCardStyles = {
+    // touchAction: 'none', // Dành cho sensor default dạng PointerSensor 
+    // Nếu sử dụng CSS.Transform như docs sẽ lỗi kiểu stretch( Kéo dài)
+    // https://github.com/clauderec/dnd-kit/issues/117
+    // transform: CSS.Transform.toString(transform), sữa lỗi không có animation khi kéo thả column bằng cách chuyển đổi giá trị transform từ  sang Translate
+    transform: CSS.Translate.toString(transform),
+
+    transition,
+    opacity: isDragging ? 0.5 : undefined,
+  }
+
   return (
-    <MuiCard sx={{
-      cursor: 'pointer',
-      boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-      overflow: 'unset', // vì CardContent có overflow mặc định là hidden nên khi CardMedia 
-      // có chiều cao lớn hơn chiều cao của CardContent sẽ bị ẩn đi, nên cần set overflow của Card
-      //  thành unset để hiển thị đầy đủ nội dung của CardMedia
-    }}>
+    <MuiCard
+      ref={setNodeRef}
+      style={dndkitCardStyles} {...attributes} {...listeners}
+      sx={{
+        cursor: 'pointer',
+        boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
+        overflow: 'unset', // vì CardContent có overflow mặc định là hidden nên khi CardMedia 
+        // có chiều cao lớn hơn chiều cao của CardContent sẽ bị ẩn đi, nên cần set overflow của Card
+        //  thành unset để hiển thị đầy đủ nội dung của CardMedia
+      }}
+    >
       {card?.cover &&
         <CardMedia
           sx={{ height: 140 }}

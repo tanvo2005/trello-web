@@ -21,6 +21,7 @@ import { mapOrder } from '~/utils/sorts'
 
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { Opacity } from '@mui/icons-material'
 
 
 function Column({ column }) {
@@ -41,7 +42,7 @@ function Column({ column }) {
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
 
   // sửu lí logic kéo thả của column
-  const { attributes, listeners, setNodeRef, transform, transition } =
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: column._id, data: { ...column } })
   // useSortable cần có id để xác định phần tử nào đang đước kéo thả
   // data: {...column}: bổ sung thêm data dữ liệu sau khi kéo thả
@@ -54,16 +55,28 @@ function Column({ column }) {
     transform: CSS.Translate.toString(transform),
 
     transition,
+    // Chiều cao phải luôn max 100% vì nếu không sẽ lỗi lúc kéo column ngắn qua một cái column dài
+    // thì phải kéo ở khu vực giữa giữa rất khó chịu. Lưu ý lúc này phải kết hợp với {...listeners}
+    //  nằm ở Box chứ không phải ở div ngoài cùng để tránh trường hợp kéo vào vùng xanh.
+    height: '100%', // để khi kéo thả column sẽ có chiều cao bằng nhau dù nội dung bên trong column có nhiều hay ít
+
+    // làm moà column khi kéo
+    opacity: isDragging ? 0.5 : undefined,
   }
 
 
   return (
-    <>
+    <div style={dndkitColumnStyles} {...attributes} >
+      {/* mục đích của thẻ div là để khắc phục lỗi 2 column cùng chiều cao với nhau sẽ không có vấn đề
+      gì hết nhưung khi 2 column khác chiều cao thì sẽ xãy ra lỗi giật giật */}
+
+      {/* khắc phục vấn đề chỉ cho phép kéo column khi nằm trong phạm vi board content là di
+      chuyển {...listeners} từ thẻ div xuống Box, hiểu đơn giản là chỉ lắng nghe sự kiện kéo thả khi
+      nằm trong phạm vi board content */}
       <Box
-        ref={setNodeRef}
-        style={dndkitColumnStyles}
-        {...attributes}
         {...listeners}
+        ref={setNodeRef}
+        // style={dndkitColumnStyles} {...attributes} {...listeners}
         sx={{
           minWidth: '300px',
           maxWidth: '300px',
@@ -335,7 +348,7 @@ function Column({ column }) {
         </Box>
 
       </Box> */}
-    </>
+    </div>
   )
 }
 

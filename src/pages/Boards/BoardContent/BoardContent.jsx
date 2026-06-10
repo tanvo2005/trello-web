@@ -363,24 +363,32 @@ function BoardContent({ board }) {
 
     // tìm các điểm giao nhau va chạm , intersection với con trỏ
     const pointerIntersections = pointerWithin(args)
+    // 1 số trường hợ khi kéo ra header hoặc container thì pointerIntersections sẽ trả về mảng rổng nẻn
+    // cần kiểm tra mảng rổng thì không làm gì
+    if (!pointerIntersections?.length) return
+
+    // vì lí do đã kiểm tra mảng ở trên nên doạn này khôn cần nữa 
     // thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây
-    const intersections = pointerIntersections?.length > 0
-      ? pointerIntersections
-      : rectIntersection(args)
+    // const intersections = pointerIntersections?.length > 0
+    //   ? pointerIntersections
+    //   : rectIntersection(args)
 
     // tìm id đầu tiên trong đám intersections ở trên
-    let overId = getFirstCollision(intersections, 'id')
+    // let overId = getFirstCollision(intersections, 'id')
+    // tìm id đầu tiên trong đám pointerIntersections ở trên
+    let overId = getFirstCollision(pointerIntersections, 'id')
+
     if (overId) {
       /**
        * nếu over là column thì sẽ tìm đến cardId gần nhất bên trong khu vực va chạm đó dựa vào 
        * thuật toán phát hiện va chạm closestCenter hay closestCorners đều được, tuy nhiên ở
-       * đây dùng closestCenter thì mượt mà hơn
+       * đây dùng closestCorners thì mượt mà hơn
        */
 
       const checkColumn = orderedColumns.find(column => column._id === overId)
       if (checkColumn) {
         console.log('overId trước khi được ghi đè: ', overId)
-        overId = closestCenter({
+        overId = closestCorners({
           ...args,
           droppableContainers: args.droppableContainers.filter(container => {
             return (container.id !== overId) && (checkColumn?.cardOrderIds?.includes(container.id))

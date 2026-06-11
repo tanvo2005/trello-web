@@ -61,6 +61,8 @@ function Card({ card }) {
         overflow: 'unset', // vì CardContent có overflow mặc định là hidden nên khi CardMedia 
         // có chiều cao lớn hơn chiều cao của CardContent sẽ bị ẩn đi, nên cần set overflow của Card
         //  thành unset để hiển thị đầy đủ nội dung của CardMedia
+
+        display: card?.FE_PlaceholderCard ? 'none' : 'block' // Ẩn Card đặc biệt Placeholder Card khi Column rỗng, vì nó chỉ phục vụ mục đích fix bug logic của thư viện Dnd-kit, không liên quan gì đến giao diện UI người dùng
       }}
     >
       {card?.cover &&

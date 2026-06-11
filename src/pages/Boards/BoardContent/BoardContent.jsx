@@ -7,7 +7,8 @@ import { DndContext, PointerSensor, useSensor, useSensors, TouchSensor, MouseSen
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
+import { generatePlaceholderCard } from '~/utils/formatters'
 
 function BoardContent({ board }) {
   // const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
@@ -85,6 +86,13 @@ function BoardContent({ board }) {
       if (nextActiveColumn) {
         // xoá card ở cái column active ( có thể hiển là column cũ cái lúc mà kéo card ra khỏi nó để sang column khác)
         nextActiveColumn.cards = nextActiveColumn.cards.filter(card => card._id !== activeDraggingCardId)
+
+        // thêm placeholder card nếu column rỗng khi bị kéo hết card di và không còn cái nào nữa
+        if (isEmpty(nextActiveColumn.cards)) {
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
+        // console.log('nextActiveColumn sau khi thêm placeholder card nếu cần', nextActiveColumn)
+
         // cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(card => card._id)
       }
@@ -101,7 +109,7 @@ function BoardContent({ board }) {
           ...activeDraggingCardData,
           columnId: nextOverColumn._id
         }
-        console.log('rebuild_activeDraggingCardData', rebuild_activeDraggingCardData)
+        // console.log('rebuild_activeDraggingCardData', rebuild_activeDraggingCardData)
         // tiếp theo là thêm card đang kéo vào overColumn ở vị trí index mới
         // toSpliced(newCardIndex, 0, activeDraggingCardData) là hàm thêm phần tử vào mảng ở vị trí 
         // index mới mà không làm thay đổi mảng cũ mà trả về một mảng mới đã được cập nhật
@@ -110,10 +118,13 @@ function BoardContent({ board }) {
         // nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, activeDraggingCardData)
         nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, rebuild_activeDraggingCardData)
 
+        // xoá placeholder card đi nếu như nó đang tồn tại 
+        nextOverColumn.cards = nextOverColumn.cards.filter(card => !card?.FE_PlaceholderCard)
 
         // cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
+      console.log('nextColumns : ', nextColumns)
 
       // return một mảng mới được tạo ra từ prevColumns sau khi đã được cập nhật lại vị trí của card đang kéo (activeDraggingCardData) trong column đích (overColumn)
       return nextColumns
@@ -387,14 +398,14 @@ function BoardContent({ board }) {
 
       const checkColumn = orderedColumns.find(column => column._id === overId)
       if (checkColumn) {
-        console.log('overId trước khi được ghi đè: ', overId)
+        // console.log('overId trước khi được ghi đè: ', overId)
         overId = closestCorners({
           ...args,
           droppableContainers: args.droppableContainers.filter(container => {
             return (container.id !== overId) && (checkColumn?.cardOrderIds?.includes(container.id))
           })
         })[0]?.id
-        console.log('overId sau khi được ghi đè: ', overId)
+        // console.log('overId sau khi được ghi đè: ', overId)
         // [0]?.id lấy phần tủ đầu tiên của overId ra sau khi được ghi đè
       }
 

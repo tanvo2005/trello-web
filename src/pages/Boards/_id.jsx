@@ -1,5 +1,6 @@
 // boards detail
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useState } from 'react'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -23,17 +24,29 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from '~/pages/Boards/BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import { mockData } from '~/apis/mock-data'
+import { fetchBoardDetailsApi } from '~/apis/index'
 
 
 function Board() {
-   return (
+  const [board, setBoard] = useState(null)
+
+  useEffect(() => {
+    // dùng react-router-dom để lấy boardId từ URL params về
+    const boardId = '6a7d1f4e982f977801f66b1e' // fix cứng để kiểm tra thử
+    // call api
+    fetchBoardDetailsApi(boardId).then(board => {
+      setBoard(board)
+    })
+
+  }, [])
+  return (
     // disableGutters maxWidth={false} sẽ hiển thi full màn hình không bị trình trạng pading, margin hay chiều
     // rông tối đa nữa
-    <Container disableGutters maxWidth={false} sx={{ height: '100vh'}}>
-    
+    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+
       <AppBar />
-      <BoardBar board={mockData?.board} />  
-      <BoardContent board={mockData?.board} />
+      <BoardBar board={board} />
+      <BoardContent board={board} />
     </Container>
     // dấu ( ?. ) là optional chaining, nếu mockData có tồn tại thì mới lấy board, 
     // nếu không có thì sẽ trả về undefined, tránh lỗi khi truy cập vào thuộc tính của một đối tượng không tồn tại

@@ -37,7 +37,6 @@ function Board() {
     fetchBoardDetailsApi(boardId).then(board => {
       setBoard(board)
     })
-
   }, [])
   return (
     // disableGutters maxWidth={false} sẽ hiển thi full màn hình không bị trình trạng pading, margin hay chiều
@@ -52,5 +51,4 @@ function Board() {
     // nếu không có thì sẽ trả về undefined, tránh lỗi khi truy cập vào thuộc tính của một đối tượng không tồn tại
   )
 }
-
 export default Board

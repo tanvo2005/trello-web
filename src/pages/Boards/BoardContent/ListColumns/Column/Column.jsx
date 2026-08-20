@@ -222,6 +222,7 @@ function Column({ column }) {
                   size='small'
                   variant='outlined'
                   autoFocus
+                  data-no-dnd='true' // thêm thuộc tính này để khi kéo thả không bị lỗi, vì thẻ TextField có thể bị kéo thả khi đang nhập liệu
                   value={newCardTitle}
                   onChange={(e) => setNewCardTitle(e.target.value)}
 

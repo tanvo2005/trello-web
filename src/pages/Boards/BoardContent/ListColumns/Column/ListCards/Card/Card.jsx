@@ -51,6 +51,7 @@ function Card({ card }) {
 
   }
 
+
   return (
     <MuiCard
       ref={setNodeRef}
@@ -62,7 +63,9 @@ function Card({ card }) {
         // có chiều cao lớn hơn chiều cao của CardContent sẽ bị ẩn đi, nên cần set overflow của Card
         //  thành unset để hiển thị đầy đủ nội dung của CardMedia
 
-        display: card?.FE_PlaceholderCard ? 'none' : 'block' // Ẩn Card đặc biệt Placeholder Card khi Column rỗng, vì nó chỉ phục vụ mục đích fix bug logic của thư viện Dnd-kit, không liên quan gì đến giao diện UI người dùng
+        display: card?.FE_PlaceholderCard ? 'none' : 'block', // Ẩn Card đặc biệt Placeholder Card khi Column rỗng, vì nó chỉ phục vụ mục đích fix bug logic của thư viện Dnd-kit, không liên quan gì đến giao diện UI người dùng
+        border: '1px solid transparent',
+        '&:hover': { borderColor: (theme) => theme.palette.primary.main }
       }}
     >
       {card?.cover &&

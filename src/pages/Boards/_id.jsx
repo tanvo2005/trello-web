@@ -44,8 +44,8 @@ function Board() {
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
 
       <AppBar />
-      <BoardBar board={board} />
-      <BoardContent board={board} />
+      <BoardBar board={mockData.board} />
+      <BoardContent board={mockData.board} />
     </Container>
     // dấu ( ?. ) là optional chaining, nếu mockData có tồn tại thì mới lấy board, 
     // nếu không có thì sẽ trả về undefined, tránh lỗi khi truy cập vào thuộc tính của một đối tượng không tồn tại

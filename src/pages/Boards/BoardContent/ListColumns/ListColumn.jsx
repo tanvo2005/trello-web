@@ -9,7 +9,7 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 
-function ListColumn({ columns }) {
+function ListColumn({ columns, createNewColumn, createNewCard }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   /**
    * toggleOpenNewColumnForm là 1 hàm để toggle trạng thái của openNewColumnForm
@@ -21,14 +21,17 @@ function ListColumn({ columns }) {
 
   // xử lí việc lưu thông tin trong input của form tạo column mới
   const [newColumnTitle, setNewColumnTitle] = useState('')
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error('Please enter column title')
       return
     }
-    // console.log('add new column: ', newColumnTitle)
+    // tạo dữ liệu column để goi api
+    const newColumnData = {
+      title: newColumnTitle,
+    }
     // goi api để xử lí ở đây
-
+    await createNewColumn(newColumnData)
     // đóng lai trạng thái thêm column mới và clear input đi
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
@@ -59,9 +62,8 @@ function ListColumn({ columns }) {
         }}
       > {/* box này có tác dụng để làm thanh scroll cho nó đẹp khi có nhiều column */}
 
-        {columns?.map((column, index) => {
-          return <Column key={index} column={column} />
-        })}
+        {columns?.map((column, index) => <Column key={index} column={column} createNewCard={createNewCard} />
+        )}
 
         {!openNewColumnForm
           ? <Box onClick={toggleOpenNewColumnForm} sx={{

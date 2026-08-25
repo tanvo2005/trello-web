@@ -28,7 +28,7 @@ import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   // const COLUMN_HEADER_HEIGHT = '50px'
   // const COLUMN_FOOTER_HEIGHT = '56px'
 
@@ -75,19 +75,26 @@ function Column({ column }) {
 
   // xử lí việc lưu thông tin trong input của form tạo card mới
   const [newCardTitle, setNewCardTitle] = useState('')
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter card title', { position: "bottom-right" })
       return
     }
-    // console.log('add new card: ', newCardTitle)
-    // goi api để xử lí ở đây
+
+    // tạo dữ liệu card để goi api
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+
+    await createNewCard(newCardData)
 
     // đóng lai trạng thái thêm card mới và clear input đi
     toggleOpenNewCardForm()
     setNewCardTitle('')
 
   }
+
 
 
   return (

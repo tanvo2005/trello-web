@@ -25,7 +25,7 @@ import Card from './ListColumns/Column/ListCards/Card/Card'
 import { cloneDeep, isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatters'
 
-function BoardContent({ board }) {
+function BoardContent({ board, createNewColumn, createNewCard }) {
   // const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
   const [orderedColumns, setOrderedColumns] = useState([])
 
@@ -457,7 +457,12 @@ function BoardContent({ board }) {
         padding: '10px 0',
       }}>
         {/* <ListColumn columns={board?.columns} /> */}
-        <ListColumn columns={orderedColumns} />
+        <ListColumn
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+
+        />
         <DragOverlay dropAnimation={customDropAnimation}>
           {/* DragOverlay là phần tử hiển thị khi kéo thả, nó sẽ hiển thị phần tử đang được kéo theo con trỏ chuột 
           nếu  như không tồn tại ID và không tồn tại type và nó là null trường hợp không kéo thả gì hết

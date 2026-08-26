@@ -25,6 +25,8 @@ import BoardBar from '~/pages/Boards/BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import { mockData } from '~/apis/mock-data'
 import { fetchBoardDetailsApi, createNewColumnApi, createNewCardApi } from '~/apis/index'
+import { generatePlaceholderCard } from '~/utils/formatters'
+import { isEmpty } from 'lodash'
 
 
 function Board() {
@@ -35,6 +37,15 @@ function Board() {
     const boardId = '6a847c49cb76665c12e66868' // fix cứng để kiểm tra thử
     // call api
     fetchBoardDetailsApi(boardId).then(board => {
+
+      //khi f5 trang web khi tạo column mới thì nó sẽ chưa có card , cần sử lí vấn đề kéo thả vào 1 column rỗng
+      board.columns.forEach(column => {
+        if (isEmpty(column.cards)) { // nếu như column rỗng
+          column.cards = [generatePlaceholderCard(column)]
+          column.cardOrderIds = [generatePlaceholderCard(column)._id]
+        }
+      })
+      console.log('board: ', board)
       setBoard(board)
     })
   }, [])
@@ -51,9 +62,19 @@ function Board() {
       ...newColumnData,
       boardId: board._id
     })
-    console.log('createdColumn: ', createdColumn)
+    // console.log('createdColumn: ', createdColumn)
 
+    // khi tạo column mới thì nó sẽ chưa có card , cần sử lí vấn đề kéo thả vào 1 column rỗng
+    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
     // cập nhật lại state board 
+    /**
+     * ở phía FE tự làm đúng lại dữ liệu state board thay vì phải gọi lại API (fetchBoardDetailsApi)
+     */
+    const newBoard = { ...board }
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    setBoard(newBoard)
   }
 
   // gọi api toạ mới card và làm lại dữ liệu trong stateBoard
@@ -65,6 +86,14 @@ function Board() {
 
     console.log('createdCard: ', createdCard)
     // cập nhật lại state board 
+    const newBoard = { ...board }
+    const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)// timf column có chứa card đang tạo
+    if (columnToUpdate) {
+      columnToUpdate.cards.push(createdCard)
+      columnToUpdate.cardOrderIds.push(createdCard._id)
+    }
+    setBoard(newBoard)
+
   }
   return (
     // disableGutters maxWidth={false} sẽ hiển thi full màn hình không bị trình trạng pading, margin hay chiều
